@@ -1,0 +1,33 @@
+.form-control {
+  display: inline-block;
+}
+#new_task input[type="submit"] {
+  margin: 10px 0px 10px 0px;
+}
+.btn-group {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+.completed {
+  text-decoration: line-through;
+}
+h1 {
+  display: inline-block;
+  color: #292b33;
+}
+body {
+  background-color: #f6f6f6;
+}
+.task {
+  display: block;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+#main {
+  margin-top: 50px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  width: 50%;
+  border: 1px solid #545454;
+}

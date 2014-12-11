@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>ElevenList</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <div class="container" id="main">
+    <h1>ElevenList</h1>
+    <form role ="form" id="new_task">
+      <label>
+        <input type="text" class ="form-control" id="task_name" name="task[name]" placeholder="Enter a task">
+        <input type="submit" value="Add Task" class="btn btn-primary">
+      </label>
+    </form>
+    <form>
+      <ol class="list-group tasks">
+      </ol>
+    </form>
+  </div>
+  <script src="js/jquery-2.1.1.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="js/scripts.js"></script>
+</body>
+</html>
