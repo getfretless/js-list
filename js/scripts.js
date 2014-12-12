@@ -1,11 +1,12 @@
 var ElevenList = function() {
   function ElevenList() {
     var app = this;
-    var tasks = [];
+    $('.tasks').sortable();
     var setupNewTaskForm = function() {
       $('form#new_task').submit(function(event) {
         event.preventDefault();
         $('.tasks').append(listItem($('#task_name').val()));
+        $('#task_name').val('');
       });
     }();
     var setupEditTaskForm = function() {
