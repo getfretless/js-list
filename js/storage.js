@@ -24,6 +24,9 @@ var ElevenList = function() {
           for (var task in tasks) {
             if (tasks.hasOwnProperty(task)) {
               tasksToAdd.splice(tasks[task].position - 1, 0, tasks[task]);
+              if (task > _this.counter) {
+                _this.counter = task;
+              }
             }
           }
           for (var i=0; i < tasksToAdd.length; i++) {
@@ -39,7 +42,7 @@ var ElevenList = function() {
         var id = _this.counter.toString()
         var task = {
           id: id,
-          position: _this.counter,
+          position: Object.keys(_this.tasks).length + 1,
           name: $('#task_name').val(),
           completed: false
         };
@@ -69,11 +72,13 @@ var ElevenList = function() {
       });
     }();
     var setupDeleteButtons = function() {
-      $('.tasks').on('click', 'button.delete', function(){
-        var id = form.closest('li').attr('id')
+      $('.tasks').on('click', 'button.delete', function(event) {
+        event.preventDefault();
+        var id = $(this).closest('li').attr('id');
+        id = id.substring(id.lastIndexOf('_') + 1);
         $(this).closest('li').remove();
         delete _this.tasks[id];
-        saveTasks();
+        updatePositions();
       });
     }();
     var setupEditButtons = function() {
