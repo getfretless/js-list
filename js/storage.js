@@ -23,12 +23,15 @@ var ElevenList = function() {
           var tasksToAdd = [];
           for (var task in tasks) {
             if (tasks.hasOwnProperty(task)) {
-              tasksToAdd.splice(tasks[task].position - 1, 0, tasks[task]);
+              tasksToAdd.push(tasks[task])
               if (task > _this.counter) {
                 _this.counter = task;
               }
             }
           }
+          tasksToAdd.sort(function(a, b) {
+            return a.position - b.position;
+          });
           for (var i=0; i < tasksToAdd.length; i++) {
             $('.tasks').append(listItem(tasksToAdd[i]));
           }
