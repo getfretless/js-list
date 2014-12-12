@@ -13,13 +13,13 @@ var ElevenList = function() {
         event.preventDefault();
         var form = $(event.currentTarget);
         value = form.find('input.edit_task_name').val();
-        form.closest('.list-group-item').replaceWith(listItem(value));
+        form.closest('li').replaceWith(listItem(value));
       });
       $('.tasks').on('click', 'button.cancel', function(event) {
         event.preventDefault();
         var form = $(event.currentTarget).closest('form');
         value = form.find('input.original_value').val();
-        form.closest('.list-group-item').replaceWith(listItem(value));
+        form.closest('li').replaceWith(listItem(value));
       });
     }();
     var setupDeleteButtons = function() {
@@ -35,6 +35,11 @@ var ElevenList = function() {
         newForm.find('input.edit_task_name').select();
       });
     }();
+    var setupCheckboxes = function() {
+      $('.tasks').on('click', ':checkbox', function (){
+        $(this).closest('li').toggleClass('completed');
+      });
+    }()
     var listItem = function(value) {
       return '<li class="list-group-item">' +
           '<div class="task">' +
