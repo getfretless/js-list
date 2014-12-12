@@ -7,6 +7,31 @@ var ElevenList = function() {
       update: function() { updatePositions(); }
     });
 
+
+    var supportsStorage = function() {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
+    };
+    var loadTasks = function() {
+      if (supportsStorage()) {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+        if (tasks !== null) {
+          _this.tasks = tasks;
+          var tasksToAdd = [];
+          for (var task in tasks) {
+            if (tasks.hasOwnProperty(task)) {
+              tasksToAdd.splice(tasks[task].position - 1, 0, tasks[task]);
+            }
+          }
+          for (var i=0; i < tasksToAdd.length; i++) {
+            $('.tasks').append(listItem(tasksToAdd[i]));
+          }
+        }
+      }
+    };
     var setupNewTaskForm = function() {
       $('form#new_task').submit(function(event) {
         event.preventDefault();
@@ -21,6 +46,7 @@ var ElevenList = function() {
         _this.tasks[id] = task;
         $('.tasks').append(listItem(task));
         $('#task_name').val('');
+        saveTasks();
       });
     }();
     var setupEditTaskForm = function() {
@@ -32,24 +58,29 @@ var ElevenList = function() {
         id = id.substring(id.lastIndexOf('_') + 1);
         _this.tasks[id].name = value;
         form.closest('li').replaceWith(listItem(_this.tasks[id]));
+        saveTasks();
       });
       $('.tasks').on('click', 'button.cancel', function(event) {
         event.preventDefault();
         var form = $(event.currentTarget).closest('form');
-        value = form.find('input.original_value').val();
-        form.closest('li').replaceWith(listItem(value));
+        var id = form.closest('li').attr('id')
+        id = id.substring(id.lastIndexOf('_') + 1);
+        form.closest('li').replaceWith(listItem(_this.tasks[id]));
       });
     }();
     var setupDeleteButtons = function() {
       $('.tasks').on('click', 'button.delete', function(){
+        var id = form.closest('li').attr('id')
         $(this).closest('li').remove();
+        delete _this.tasks[id];
+        saveTasks();
       });
     }();
     var setupEditButtons = function() {
       $('.tasks').on('click', 'button.edit', function (event) {
         event.preventDefault();
         var newForm = editTaskForm(this);
-        $(this).closest('div.task').html(newForm);
+        $(this).closest('div.task').replaceWith(newForm);
         newForm.find('input.task_name').select();
       });
     }();
@@ -59,13 +90,14 @@ var ElevenList = function() {
         id = id.substring(id.lastIndexOf('_') + 1);
         $(this).closest('li').toggleClass('completed');
         _this.tasks[id].completed = $(this).closest('li').hasClass('completed');
+        saveTasks();
       });
     }()
     var listItem = function(task) {
-      return '<li class="list-group-item" id="task_' + task.id + '">' +
+      return '<li class="list-group-item' + (task.completed ? ' completed' : '')  + '" id="task_' + task.id + '">' +
           '<div class="task">' +
-            '<label class="checkbox-inline"' + (task.completed ? ' checked>' : '>') +
-              '<input type="checkbox"> ' +
+            '<label class="checkbox-inline">' +
+              '<input type="checkbox"' + (task.completed ? ' checked>' : '>') +
               task.name +
             '</label>' +
             '<div class="btn-group">' +
@@ -92,8 +124,15 @@ var ElevenList = function() {
         id = tasks[i].substring(tasks[i].lastIndexOf('_') + 1);
         _this.tasks[id].position = i + 1;
       }
+      saveTasks();
     };
-  }
+    var saveTasks = function() {
+      if (supportsStorage()) {
+        localStorage.tasks = JSON.stringify(_this.tasks);
+      }
+    };
+    loadTasks();
+  };
   return ElevenList;
 }();
 
